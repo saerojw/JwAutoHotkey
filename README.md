@@ -1,4 +1,4 @@
-Modified on 2022/02/16 by Juwon\
+Written by Juwon\
 e-mail: saero94j@gmail.com
 
 Script for using macOS layout keyboard on Windows.\
