@@ -1,5 +1,5 @@
 ;------------------------------------------------------------------------------;
-; Modified on 2022/02/16 by Juwon
+; Modified on 2022/02/26 by Juwon
 ; e-mail: saero94j@gmail.com
 ;
 ; Script for using macOS layout keyboard on Windows.
@@ -76,34 +76,24 @@ SetStoreCapsLockMode False
 >^Tab::AltTab       ; alt tap
 >^`::ShiftAltTab    ; shift alt tap
 
->^[::!Left      ; go back
->^]::!Right     ; go next
->^c::^Ins       ; copy
->^v::+Ins       ; paste
+>^[::!Left  ; go back
+>^]::!Right ; go next
+>^c::^Ins   ; copy
+>^v::+Ins   ; paste
 >^m::WinMinimize "A"    ; minimize window
->^q::!F4        ; close window
-+>^z::^y        ; redo
+>^q::!F4    ; close window
++>^z::^y    ; redo
 
 
 ;;; navigation keys
-^Left::Send "{Home}"
-^Right::Send "{End}"
->^Up::Send "^{Home}"
->^Down::Send "^{End}"
-<^Up::Send "{PgUp}"
-<^Down::Send "{PgDn}"
-
-+^Left::Send "+{Home}"
-+^Right::Send "+{End}"
-+>^Up::Send "+^{Home}"
-+<^Up::Send "+{PgUp}"
-+>^Down::Send "+^{End}"
-+<^Down::Send "+{PgDn}"
-
-!Left::Send "^{Left}"
-!Right::Send "^{Right}"
-+!Left::Send "+^{Left}"
-+!Right::Send "+^{Right}"
+^Left::Home
+^Right::End
+!Left::^Left
+!Right::^Right
+>^Up::^Home
+>^Down::^End
+<^Up::PgUp
+<^Down::PgDn
 
 
 ;;; CapsLock
@@ -122,57 +112,57 @@ SetStoreCapsLockMode False
     CapsLockFlag := False
 }
 #HotIf GetKeyState("CapsLock", "P")
-Tab::Send "^{Tab}"
-+Tab::Send "+^{Tab}"
-Esc::Send "^{Esc}"
-`::Send "+^{Tab}"
-1::Send "^1"
-2::Send "^2"
-3::Send "^3"
-4::Send "^4"
-5::Send "^5"
-6::Send "^6"
-7::Send "^7"
-8::Send "^8"
-9::Send "^9"
-0::Send "^0"
-BS::Send "{Del}"
-\::Send "^\"
-Enter::Send "^{Enter}"
-a::Send "{Home}"
-b::Send "^{Left}"
-c::Send "^c"
-d::Send "^{Del}"
-e::Send "{End}"
-f::Send "^{Right}"
-g::Send "^g"
-h::Send "{BS}"
-i::Send "{Up}"
-j::Send "{Left}"
-k::Send "{Down}"
-l::Send "{Right}"
-m::Send "^m"
-n::Send "{PgDn}"
-o::Send "{Enter}"
-p::Send "{PgUp}"
-q::Send "^q"
-r::Send "^r"
-s::Send "^s"
-t::Send "^t"
-u::Send "^u"
-v::Send "^v"
-w::Send "^w"
-x::Send "^x"
-y::Send "^y"
-z::Send "^z"
-[::Send "^["
-]::Send "^]"
-`;::Send "^;"
-'::Send "^'"
-,::Send "^,"
-.::Send "^."
-/::Send "^/"
-Space::Send "^{Space}"
+Tab::^Tab
+Esc::^Esc
+`::+^Tab
+1::^1
+2::^2
+3::^3
+4::^4
+5::^5
+6::^6
+7::^7
+8::^8
+9::^9
+0::^0
+BS::Del
+\::^\
+Enter::^Enter
+a::Home
+b::^Left
+c::^c
+d::^Del
+e::End
++e::+End
+f::^Right
+g::^g
+h::BS
+i::Up
+j::Left
+k::Down
+l::Right
+m::^m
+n::PgDn
+o::Enter
+p::PgUp
+q::^q
+r::^r
+s::^s
+t::^t
+u::^u
+v::^v
+w::^w
+x::^x
+y::^y
+z::^z
+[::^[
+]::^]
+`;::^;
+'::^'
+,::^,
+.::^.
+/::^/
+Space::^Space
 Left::Send "^#{Left}"   ; prev desktop
 Right::Send "^#{Right}" ; next desktop
 Up::Send "#{Tab}"       ; task view
