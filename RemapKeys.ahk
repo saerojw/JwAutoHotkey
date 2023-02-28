@@ -97,19 +97,13 @@ SetStoreCapsLockMode False
 
 
 ;;; CapsLock
-*CapsLock::{
-    global CapsLockFlag := GetKeyState("Shift")
-}
++Space::CapsLock
 *CapsLock up::{
-    global CapsLockFlag
-    if (A_PriorKey=="CapsLock") {
-        if (GetKeyState("Shift") or CapsLockFlag)
-            Send "{CapsLock}"
-        else if not (GetKeyState("Ctrl") or GetKeyState("Alt")
-                     or GetKeyState("LWin") or GetKeyState("RWin"))
-            Send "{VK15}"
+    if (A_PriorKey=="CapsLock"
+        and not (GetKeyState("Shift") or GetKeyState("Ctrl") or GetKeyState("Alt")
+                 or GetKeyState("LWin") or GetKeyState("RWin"))) {
+        Send "{VK15}"
     }
-    CapsLockFlag := False
 }
 #HotIf GetKeyState("CapsLock", "P")
 Tab::^Tab
@@ -162,7 +156,7 @@ z::^z
 ,::^,
 .::^.
 /::^/
-Space::^Space
+Space::Send "{VK15}"    ; Hangul
 Left::Send "^#{Left}"   ; prev desktop
 Right::Send "^#{Right}" ; next desktop
 Up::Send "#{Tab}"       ; task view
@@ -208,18 +202,18 @@ Enter::{
 ;;; open current web page on the another browser (chrome <-> edge)
 #HotIf WinActive("ahk_exe chrome.exe")
 !>^n::{
-    Send "^l^c"         ; copy address
-    sleep 100
+    Send "^l"           ; copy address
+    sleep 10
+    Send "^c"
     Run "msedge.exe --new-window " A_Clipboard
-    Send "^l^v{Enter}"  ; paste address and go
 }
 
 #HotIf WinActive("ahk_exe msedge.exe")
 !>^n::{
-    Send "^l^c"         ; copy address
-    sleep 100
+    Send "^l"           ; copy address
+    sleep 10
+    Send "^c"
     Run "chrome.exe --new-window " A_Clipboard
-    Send "^l^v{Enter}"  ; paste address and go
 }
 
 
