@@ -127,7 +127,6 @@ b::^Left
 c::^c
 d::^Del
 e::End
-+e::+End
 f::^Right
 g::^g
 h::BS
@@ -143,6 +142,14 @@ q::^q
 r::^r
 s::^s
 t::^t
++t::{   ; quick translate as you read with DeepL
+    if WinActive("ahk_exe chrome.exe") {
+        Send "+^y"
+    } else {
+        Send "^#!t"
+    }
+}
++>^t::+^!#t ; translate text within the DeepL app
 u::^u
 v::^v
 w::^w
