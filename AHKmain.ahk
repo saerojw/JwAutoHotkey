@@ -1,2 +1,5 @@
 #Include "ControlWindow.ahk"
 #Include "RemapKeys.ahk"
+#Include "RemapCapsLock.ahk"
+#Include "Shortcut.ahk"
+; #Include "Hotstring.ahk"
