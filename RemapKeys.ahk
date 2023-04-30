@@ -56,9 +56,9 @@ SetStoreCapsLockMode False
 +Space::Enter
 <^Space::VK15   ; Hangul
 !Enter::VK19    ; Hanja
-; <^>^t::WinSetAlwaysOnTop -1, "A" ; toggle AlwaysOnTop -> powertoys
-<^>^t::^#t      ; powertoys AlwaysOnTop shortcut
-; >^Space::#s     ; search -> powertoys run
+; ^!t::WinSetAlwaysOnTop -1, "A" ; toggle AlwaysOnTop -> powertoys
+!Space::#s      ; search
+>^Space::#Space ; search -> powertoys run
 <^>^Space::#.   ; Emoji
 
 
@@ -86,11 +86,42 @@ SetStoreCapsLockMode False
 
 
 ;;; navigation keys
-^Left::Home
-^Right::End
-!Left::^Left
-!Right::^Right
->^Up::^Home
->^Down::^End
-<^Up::PgUp
-<^Down::PgDn
+^Left:: Send "{Home}"
+^Right:: Send "{End}"
+!Left:: Send "^{Left}"
+!Right:: Send "^{Right}"
+>^Up:: Send "^{Home}"
+>^Down:: Send "^{End}"
+<^Up:: Send "{PgUp}"
+<^Down:: Send "{PgDn}"
++^Left:: Send "+{Home}"
++^Right:: Send "+{End}"
++!Left:: Send "+^{Left}"
++!Right:: Send "+^{Right}"
++>^Up:: Send "+^{Home}"
++>^Down:: Send "+^{End}"
++<^Up:: Send "+{PgUp}"
++<^Down:: Send "+{PgDn}"
+
+;;; shourcut
++^3:: Send "+#s"
++>^4:: {
+    if WinExist("Parsify Desktop") {
+        if WinActive("Parsify Desktop") {
+            WinMinimize("Parsify Desktop")
+        } else {
+            WinActivate
+            WinSetAlwaysOnTop 1, "A"
+        }
+    } else {
+        Run "C:\Users\User\AppData\Local\Programs\parsify-desktop\Parsify Desktop.exe"
+        WinSetAlwaysOnTop 1, "A"
+    }
+}
++>^5:: {
+    if WinExist("ahk_exe WindowsTerminal.exe") {
+        WinActivate
+    } else {
+        Run "explorer.exe shell:appsFolder\Microsoft.WindowsTerminal_8wekyb3d8bbwe!App"
+    }
+}
