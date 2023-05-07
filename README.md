@@ -6,21 +6,21 @@ Written based on AutoHotkey v2.0.2
 
 Windows layout:
 ```
-    CapsLock
-    LShift                                         RShift
-    (fn) - LCtrl - LWin - LAlt  ---- RAlt  - RWin - RCtrl
+CapsLock
+LShift                                         RShift
+(fn) - LCtrl - LWin - LAlt  ---- RAlt  - RWin - RCtrl
 ```
 MacOS layout:
 ```
-    CapsLock
-    LShift                                         RShift
-    (fn) - LCtrl - LOpt - LCmd  ---- RCmd  - ROpt - RCtrl
+CapsLock
+LShift                                         RShift
+(fn) - LCtrl - LOpt - LCmd  ---- RCmd  - ROpt - RCtrl
 ```
 custom layout:
 ```
-    CapsLock
-    LShift                                         RShift
-    (fn) - LCtrl - LAlt - RCtrl ---- RCtrl - RAlt - RWin
+CapsLock
+LShift                                         RShift
+(fn) - LCtrl - LAlt - RCtrl ---- RCtrl - RAlt - RWin
 ```
 
 ---
@@ -44,13 +44,20 @@ A2 A1 B2 B1 A2 A1 B2 B1  ;; AFTER<-BEFORE   ; AFTER<-BEFORE
 Specifically, see "*CustomLayout.reg*"
 
 ---
-\
+
 `Win`(remapped as `RCtrl`) is used as `Cmd` in MacOS.
 ## RemapKeys.ahk
 - use modifiers like macOS.
-- toggle Hangul/English by tapping `CapsLock`
-- `CapsLock` is not only used as Ctrl but also an fn-key for navigation keys.
-- some shortcut for WindowsTerminal, Chrome/Edge, MS Office and 한컴오피스
+- toggle Hangul/English with `LCtrl`+`Space`
+- some global shortcuts
+
+## RemapCapsLock.ahk
+- set Hangul by tapping `LShift`
+- set English by tapping `CapsLock`
+- `CapsLock` is not only used as Ctrl but also an fn-key for navigation keys or Shift for some keys.
+
+## Shourtcut.ahk
+- some shortcut for WindowsTerminal, Chrome/Edge, MS Office and 한컴오피스, etc.
 
 ## ControlWindow.ahk
 - provides screen control shortcuts such as Rectangle on macOS
