@@ -21,14 +21,24 @@ IMECheckHangul() { ; 0: 영어, 1: 한글
     }
 }
 
+Lclick := False, ThisLShift := True
 ~+LButton:: global Lclick := True
-~LShift up:: {
-    global Lclick
-    if (A_PriorKey == "LShift" and not IMECheckHangul() and not Lclick
+~LShift:: {
+    global ThisLShift
+    if ThisLShift {
+        global t_LShiftDown := A_TickCount
+    }
+    ThisLShift := False
+}
+LShift up:: {
+    global Lclick, t_LShiftDown, ThisLShift
+    t_LShiftPressed := A_TickCount - t_LShiftDown
+    if (A_PriorKey == "LShift" and not IMECheckHangul() and not Lclick and t_LShiftPressed < 500
         and not (GetKeyState("Ctrl") or GetKeyState("Alt") or GetKeyState("LWin") or GetKeyState("RWin"))) {
         Send "{VK15}"
     }
     Lclick := False
+    ThisLShift := True
 }
 #HotIf GetKeyState("CapsLock", "P")
 Tab::^Tab
