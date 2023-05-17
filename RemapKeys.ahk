@@ -60,6 +60,7 @@ SetStoreCapsLockMode False
 !Space::#s      ; search
 >^Space::#Space ; search -> powertoys run
 <^>^Space::#.   ; Emoji
+<^>^q:: DllCall("LockWorkStation")    ; Lock Screen
 
 
 ;;; BS/Del
@@ -80,8 +81,8 @@ SetStoreCapsLockMode False
 >^]::!Right ; go next
 >^c::^Ins   ; copy
 >^v::+Ins   ; paste
->^m:: WinMinimize "A"    ; minimize window
->^q::!F4    ; close window
+>^m:: WinMinimize "A"   ; minimize window
+>^q:: Send "!{F4}"      ; close window
 +>^z::^y    ; redo
 
 
