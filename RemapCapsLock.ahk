@@ -21,7 +21,7 @@ IMECheckHangul() { ; 0: 영어, 1: 한글
     }
 }
 
-Lclick := False, ThisLShift := True
+Lclick := False, ThisLShift := True, t_LShiftDown := 0
 ~+LButton:: global Lclick := True
 ~LShift:: {
     global ThisLShift
@@ -33,7 +33,7 @@ Lclick := False, ThisLShift := True
 LShift up:: {
     global Lclick, t_LShiftDown, ThisLShift
     t_LShiftPressed := A_TickCount - t_LShiftDown
-    if (A_PriorKey == "LShift" and not IMECheckHangul() and not Lclick and t_LShiftPressed < 500
+    if (A_PriorKey == "LShift" and not IMECheckHangul() and not Lclick and t_LShiftPressed < 200
         and not (GetKeyState("Ctrl") or GetKeyState("Alt") or GetKeyState("LWin") or GetKeyState("RWin"))) {
         Send "{VK15}"
     }

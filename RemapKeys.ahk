@@ -79,8 +79,15 @@ SetStoreCapsLockMode False
 
 >^[::!Left  ; go back
 >^]::!Right ; go next
->^c::^Ins   ; copy
->^v::+Ins   ; paste
+>^c:: {
+    _clipboard := A_Clipboard
+    Send "^{Ins}" ; copy
+    if A_Clipboard == _clipboard {
+        Send "^c"
+    }
+}
+>^v:: Send "+{Ins}"     ; paste
++>^v:: Send "#v"        ; clipboard
 >^m:: WinMinimize "A"   ; minimize window
 >^q:: Send "!{F4}"      ; close window
 +>^z::^y    ; redo
