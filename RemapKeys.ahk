@@ -1,5 +1,5 @@
 ;------------------------------------------------------------------------------;
-; Modified on 2022/02/26 by Juwon
+; Modified on 2023/05/31 by Juwon
 ; e-mail: saero94j@gmail.com
 ;
 ; Script for using macOS layout keyboard on Windows.
@@ -79,11 +79,11 @@ SetStoreCapsLockMode False
 
 >^[::!Left  ; go back
 >^]::!Right ; go next
->^c:: {
-    _clipboard := A_Clipboard
-    Send "^{Ins}" ; copy
-    if A_Clipboard == _clipboard {
+>^c:: {     ; copy
+    if WinActive("ahk_exe KakaoTalk.exe") {
         Send "^c"
+    } else {
+        Send "^{Ins}"
     }
 }
 >^v:: Send "+{Ins}"     ; paste
