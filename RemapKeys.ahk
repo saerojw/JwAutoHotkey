@@ -90,7 +90,6 @@ SetStoreCapsLockMode False
 +>^v:: Send "#v"        ; clipboard
 >^m:: WinMinimize "A"   ; minimize window
 >^q:: Send "!{F4}"      ; close window
-+>^z::^y    ; redo
 
 
 ;;; navigation keys
@@ -110,6 +109,7 @@ SetStoreCapsLockMode False
 +>^Down:: Send "+^{End}"
 +<^Up:: Send "+{PgUp}"
 +<^Down:: Send "+{PgDn}"
+
 
 ;;; shourcut
 +^3:: Send "+#s"

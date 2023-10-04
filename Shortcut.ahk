@@ -33,7 +33,18 @@ Enter:: {
 >^i:: Send "!{Enter}"   ; information
 >^d:: Send "^c^v"       ; duplicate
 >^BS:: Send "{Del}"     ; delete
+Space:: {
+    ClassNN := ControlGetClassNN(ControlGetFocus("A"))
+    ; select file or folder in explorer or desktop
+    if (ClassNN = "DirectUIHWND2" or ClassNN = "SysListView321") {
+        Send "+{Space}"
+    } else {
+        Send "{Space}"
+    }
+}
 
+#HotIf WinActive("ahk_exe PowerToys.Peek.UI.exe")
+Space:: !Space
 
 ;;; open current web page on the another browser (chrome <-> edge)
 #HotIf WinActive("ahk_exe chrome.exe")
@@ -51,6 +62,9 @@ Enter:: {
     Send "^c"           ; copy
     Run "chrome.exe --new-window " A_Clipboard
 }
+
+#HotIf not (WinActive("ahk_exe chrome.exe") or WinActive("ahk_exe msedge.exe"))
++>^z::^y    ; redo
 
 
 ;;; microsoft office

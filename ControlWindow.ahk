@@ -57,14 +57,18 @@ updateMonitorTarget(index) {
     H_3_4 := H_1_4 * 3
     vertical := W_len < H_len
     display.list[index].id := X_min . Y_min . X_max . Y_max
-    display.list[index].info := { xmin: X_min, xcom: X_1_2, xmax: X_max, wmax: W_len,
-        ymin: Y_min, ycom: Y_1_2, ymax: Y_max, hmax: H_len }
+    display.list[index].info := {
+        xmin: X_min, xcom: X_1_2, xmax: X_max, wmax: W_len,
+        ymin: Y_min, ycom: Y_1_2, ymax: Y_max, hmax: H_len
+    }
 
     AlmostFullRatio := 0.9
-    display.list[index].AlmostFullscreen := { X: X_min + (1 - AlmostFullRatio) / 2 * W_len,
+    display.list[index].AlmostFullscreen := {
+        X: X_min + (1 - AlmostFullRatio) / 2 * W_len,
         Y: Y_min + (1 - AlmostFullRatio) / 2 * H_len,
         W: AlmostFullRatio * W_len,
-        H: AlmostFullRatio * H_len }
+        H: AlmostFullRatio * H_len
+    }
 
     display.list[index].LeftHalf := { X: X_min, Y: Y_min, W: W_1_2, H: H_len }
     display.list[index].RightHalf := { X: X_1_2, Y: Y_min, W: W_1_2, H: H_len }
@@ -159,8 +163,10 @@ getMonitorIndex(xcow, ycow) {
             updateMonitorTarget(A_Index)
         }
 
-        if (display.list[A_Index].info.xmin < xcow and xcow < display.list[A_Index].info.xmax
-        and display.list[A_Index].info.ymin < ycow and ycow < display.list[A_Index].info.ymax) {
+        if (display.list[A_Index].info.xmin < xcow
+            and display.list[A_Index].info.ymin < ycow
+            and xcow < display.list[A_Index].info.xmax
+            and ycow < display.list[A_Index].info.ymax) {
             return A_Index
         }
     }
