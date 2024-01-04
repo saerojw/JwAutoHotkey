@@ -77,8 +77,9 @@ n::PgDn
 o:: Send "{Enter}{Left}"
 p::PgUp
 q::^q
-r::^r
-s::Space
+r::F9
++r::F5
+s::^s
 t::^t
 u::^u
 v::^v
