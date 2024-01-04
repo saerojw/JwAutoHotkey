@@ -19,11 +19,11 @@
 
 
 ;;; explorer
-#HotIf WinActive("ahk_exe Explorer.EXE")
+#HotIf WinActive("ahk_exe Explorer.EXE") or WinActive("ahk_exe explorer.exe")
 Enter:: {
     ClassNN := ControlGetClassNN(ControlGetFocus("A"))
     ; select file or folder in explorer or desktop
-    if (ClassNN = "DirectUIHWND2" or ClassNN = "SysListView321") {
+    if (InStr(ClassNN, "DirectUIHWND")>0 or ClassNN = "SysListView321") {
         Send "{F2}"     ; rename
     } else {
         Send "{Enter}"  ; done
@@ -36,7 +36,7 @@ Enter:: {
 Space:: {
     ClassNN := ControlGetClassNN(ControlGetFocus("A"))
     ; select file or folder in explorer or desktop
-    if (ClassNN = "DirectUIHWND2" or ClassNN = "SysListView321") {
+    if (InStr(ClassNN, "DirectUIHWND")>0 or ClassNN = "SysListView321") {
         Send "+{Space}"
     } else {
         Send "{Space}"
@@ -73,6 +73,7 @@ Space:: !Space
 >^0:: Send "!wj"            ; view -> page width
 >^-:: Send "^{WheelDown}"   ; zoom out
 >^=:: Send "^{WheelUp}"     ; zoom in
+!Enter:: Send "!{Enter}"    ; new line in cell
 
 #HotIf WinActive("ahk_exe POWERPNT.EXE")
 +>^4:: Send "!nei"          ; insert equation
