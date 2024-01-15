@@ -21,7 +21,7 @@
 ; custom layout:
 ;     CapsLock
 ;     LShift                                         RShift
-;     (fn) - LCtrl - LAlt - RCtrl ---- RCtrl - RAlt - RWin
+;     (fn) - RCtrl - LAlt - LCtrl ---- LCtrl - RAlt - RWin
 ;
 ;;; Remap via Registry Editor ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; #REMARK: I choose this for using mouse gesture button
@@ -54,42 +54,42 @@ SetStoreCapsLockMode False
 
 ;;; Space
 +Space::Enter
-<^Space::VK15   ; Hangul
+>^Space::VK15   ; Hangul
 !Enter::VK19    ; Hanja
 ; ^!t::WinSetAlwaysOnTop -1, "A" ; toggle AlwaysOnTop -> powertoys
 !Space::#s      ; search
->^Space::#Space ; search -> powertoys run
-<^>^Space::#.   ; Emoji
-<^>^q:: DllCall("LockWorkStation")    ; Lock Screen
+<^Space::#Space ; search -> powertoys run
+>^<^Space::#.   ; Emoji
+>^<^q:: DllCall("LockWorkStation")    ; Lock Screen
 
 
 ;;; BS/Del
-<^BS:: Send "{Del}"          ; delete
+>^BS:: Send "{Del}"          ; delete
 !BS:: Send "^{BS}"           ; delete a prev word
-<^!BS:: Send "+^{Right}{BS}" ; delete a next word <- prevent ^!Del
+>^!BS:: Send "+^{Right}{BS}" ; delete a next word <- prevent ^!Del
 !Del:: Send "^{Del}"         ; delete a next word
->^BS:: Send "+{Home}{Del}"   ; delete line till cursor
-<^>^BS::
->^Del:: Send "+{End}{Del}"   ; delete line from cursor
+<^BS:: Send "+{Home}{Del}"   ; delete line till cursor
+>^<^BS::
+<^Del:: Send "+{End}{Del}"   ; delete line from cursor
 
 
 ;;; Windows key
->^Tab::AltTab       ; alt tap
->^`::ShiftAltTab    ; shift alt tap
+<^Tab::AltTab       ; alt tap
+<^`::ShiftAltTab    ; shift alt tap
 
->^[::!Left  ; go back
->^]::!Right ; go next
->^c:: {     ; copy
+<^[::!Left  ; go back
+<^]::!Right ; go next
+<^c:: {     ; copy
     if WinActive("ahk_exe KakaoTalk.exe") {
         Send "^c"
     } else {
         Send "^{Ins}"
     }
 }
->^v:: Send "+{Ins}"     ; paste
-+>^v:: Send "#v"        ; clipboard
->^m:: WinMinimize "A"   ; minimize window
->^q:: Send "!{F4}"      ; close window
+<^v:: Send "+{Ins}"     ; paste
++<^v:: Send "#v"        ; clipboard
+<^m:: WinMinimize "A"   ; minimize window
+<^q:: Send "!{F4}"      ; close window
 
 
 ;;; navigation keys
@@ -97,23 +97,23 @@ SetStoreCapsLockMode False
 ^Right:: Send "{End}"
 !Left:: Send "^{Left}"
 !Right:: Send "^{Right}"
->^Up:: Send "^{Home}"
->^Down:: Send "^{End}"
-<^Up:: Send "{PgUp}"
-<^Down:: Send "{PgDn}"
+<^Up:: Send "^{Home}"
+<^Down:: Send "^{End}"
+>^Up:: Send "{PgUp}"
+>^Down:: Send "{PgDn}"
 +^Left:: Send "+{Home}"
 +^Right:: Send "+{End}"
 +!Left:: Send "+^{Left}"
 +!Right:: Send "+^{Right}"
-+>^Up:: Send "+^{Home}"
-+>^Down:: Send "+^{End}"
-+<^Up:: Send "+{PgUp}"
-+<^Down:: Send "+{PgDn}"
++<^Up:: Send "+^{Home}"
++<^Down:: Send "+^{End}"
++>^Up:: Send "+{PgUp}"
++>^Down:: Send "+{PgDn}"
 
 
 ;;; shourcut
 +^3:: Send "+#s"
-+>^4:: {
++<^4:: {
     if WinExist("Parsify Desktop") {
         if WinActive("Parsify Desktop") {
             WinMinimize("Parsify Desktop")
@@ -126,7 +126,7 @@ SetStoreCapsLockMode False
         WinSetAlwaysOnTop 1, "A"
     }
 }
-+>^5:: {
++<^5:: {
     if WinExist("ahk_exe WindowsTerminal.exe") {
         WinActivate
     } else {

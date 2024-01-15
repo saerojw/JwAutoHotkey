@@ -44,21 +44,27 @@ LShift up:: {
 Tab::^Tab
 Esc::^Esc
 `::+^Tab
-1::+1
-2::+2
-3::+3
+; 1::+1
+; 2::+2
+; 3::+3
 +3:: Send "+#s"
-4::+4
-5::+5
-6::+6
-7::+7
-8::+8
+; 4::+4
+; 5::+5
+; 6::+6
+; 7::+7
+; 8::+8
 9::+9
 0::+0
--::+-
-=::+=
+; -::+-
+=:: {
+    if WinActive("ahk_exe WINWORD.EXE") or WinActive("ahk_exe POWERPNT.EXE") {
+        Send "!nei"          ; insert equation
+    } else {
+        Send "="
+    }
+}
 BS::Del
-\::+\
+; \::+\
 Enter::^Enter
 a::Home
 b::^Left
