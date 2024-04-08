@@ -251,44 +251,116 @@ controlWindow(loc) {
     return
 }
 
-;#### shortcuts
->^!f:: controlWindow("Fullscreen")
+; shortcuts
+>^!+z::
+>^!+Down::
+>^!+Left:: controlWindow("PreviousDisplay")
+>^!z::
+>^!+Up::
+>^!+Right:: controlWindow("NextDisplay")
+>^!m:: #Down
+;Send "#{Tab}"     ; task view
+
 >^!Enter:: controlWindow("AlmostFullscreen")
->^!c:: controlWindow("Center")
 >^!=:: controlWindow("MakeLarger")
 >^!-:: controlWindow("MakeSmaller")
 
->^!<^Right:: controlWindow("NextDisplay")
->^!<^Left:: controlWindow("PreviousDisplay")
-
+>^!a::
 >^!Left:: controlWindow("LeftHalf")
+>^!d::
 >^!Right:: controlWindow("RightHalf")
+>^!w::
 >^!Up:: controlWindow("TopHalf")
+>^!s::
 >^!Down:: controlWindow("BottomHalf")
+>^!+s::{
+    controlWindow("LeftHalf")
+    controlWindow("Center")
+}
 
->^![:: controlWindow("TopLeft")
->^!]:: controlWindow("TopRight")
->^!;:: controlWindow("BottomLeft")
->^!':: controlWindow("BottomRight")
+>^!+q:: controlWindow("TopLeft")
+>^!+e:: controlWindow("TopRight")
+>^!+a:: controlWindow("BottomLeft")
+>^!+d:: controlWindow("BottomRight")
 
->^!b:: controlWindow("LeftThird")
->^!n:: controlWindow("CenterThird")
->^!m:: controlWindow("RightThird")
+>^!+x:: controlWindow("LeftThird")
+>^!+c:: controlWindow("CenterThird")
+>^!+v:: controlWindow("RightThird")
 
 >^!x:: controlWindow("LeftTwoThird")
+>^!c:: controlWindow("Center")
 >^!v:: controlWindow("RightTwoThird")
 
->^!h:: controlWindow("FirstQuarter")
->^!j:: controlWindow("SecondQuarter")
->^!k:: controlWindow("ThirdQuarter")
->^!l:: controlWindow("LastQuarter")
+>^!q:: controlWindow("LeftThreeQuarter")
+>^!f:: controlWindow("Fullscreen")
+>^!e:: controlWindow("RightThreeQuarter")
 
->^!d:: controlWindow("LeftThreeQuarter")
->^!g:: controlWindow("RightThreeQuarter")
+>^!1:: controlWindow("FirstQuarter")
+>^!2:: controlWindow("SecondQuarter")
+>^!3:: controlWindow("ThirdQuarter")
+>^!4:: controlWindow("LastQuarter")
 
->^!i:: controlWindow("FirstSixth")
->^!o:: controlWindow("SecondSixth")
->^!p:: controlWindow("ThirdSixth")
->^!,:: controlWindow("FourthSixth")
->^!.:: controlWindow("FifthSixth")
->^!/:: controlWindow("LastSixth")
+>^!5:: controlWindow("FirstSixth")
+>^!6:: controlWindow("SecondSixth")
+>^!7:: controlWindow("ThirdSixth")
+>^!8:: controlWindow("FourthSixth")
+>^!9:: controlWindow("FifthSixth")
+>^!0:: controlWindow("LastSixth")
+
+#HotIf GetKeyState("CapsLock", "P")
+; shortcuts
+!+z::
+!+Down::
+!+Left:: controlWindow("PreviousDisplay")
+!z::
+!+Up::
+!+Right:: controlWindow("NextDisplay")
+!m:: #Down
+;Send "#{Tab}"     ; task view
+
+!Enter:: controlWindow("AlmostFullscreen")
+!=:: controlWindow("MakeLarger")
+!-:: controlWindow("MakeSmaller")
+
+!a::
+!Left:: controlWindow("LeftHalf")
+!d::
+!Right:: controlWindow("RightHalf")
+!w::
+!Up:: controlWindow("TopHalf")
+!s::
+!Down:: controlWindow("BottomHalf")
+!+s::{
+    controlWindow("LeftHalf")
+    controlWindow("Center")
+}
+
+!+q:: controlWindow("TopLeft")
+!+e:: controlWindow("TopRight")
+!+a:: controlWindow("BottomLeft")
+!+d:: controlWindow("BottomRight")
+
+!+x:: controlWindow("LeftThird")
+!+c:: controlWindow("CenterThird")
+!+v:: controlWindow("RightThird")
+
+!x:: controlWindow("LeftTwoThird")
+!c:: controlWindow("Center")
+!v:: controlWindow("RightTwoThird")
+
+!q:: controlWindow("LeftThreeQuarter")
+!f:: controlWindow("Fullscreen")
+!e:: controlWindow("RightThreeQuarter")
+
+!1:: controlWindow("FirstQuarter")
+!2:: controlWindow("SecondQuarter")
+!3:: controlWindow("ThirdQuarter")
+!4:: controlWindow("LastQuarter")
+
+!5:: controlWindow("FirstSixth")
+!6:: controlWindow("SecondSixth")
+!7:: controlWindow("ThirdSixth")
+!8:: controlWindow("FourthSixth")
+!9:: controlWindow("FifthSixth")
+!0:: controlWindow("LastSixth")
+#HotIf

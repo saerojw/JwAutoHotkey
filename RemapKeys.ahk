@@ -19,9 +19,9 @@
 ; Win-key is used as Cmd in MacOS
 ;
 ; custom layout:
-;     CapsLock
+;     CapsLock (or RCtrl)
 ;     LShift                                         RShift
-;     (fn) - RCtrl - LAlt - LCtrl ---- LCtrl - RAlt - RWin
+;     (fn) - RCtrl - LAlt - LCtrl ---- RWin - RWin - RCtrl
 ;
 ;;; Remap via Registry Editor ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; #REMARK: I choose this for using mouse gesture button
@@ -51,16 +51,15 @@
 ;------------------------------------------------------------------------------;
 SetStoreCapsLockMode False
 
-
 ;;; Space
-+Space::Enter
++Space::CapsLock
 >^Space::VK15   ; Hangul
-!Enter::VK19    ; Hanja
+#Space::VK19    ; Hanja
 ; ^!t::WinSetAlwaysOnTop -1, "A" ; toggle AlwaysOnTop -> powertoys
 !Space::#s      ; search
 <^Space::#Space ; search -> powertoys run
->^<^Space::#.   ; Emoji
->^<^q:: DllCall("LockWorkStation")    ; Lock Screen
+; >^<^Space::#.   ; Emoji
+; >^<^q:: DllCall("LockWorkStation")    ; Lock Screen
 
 
 ;;; BS/Del
@@ -76,9 +75,19 @@ SetStoreCapsLockMode False
 ;;; Windows key
 <^Tab::AltTab       ; alt tap
 <^`::ShiftAltTab    ; shift alt tap
+>^`::+^Tab
 
-<^[::!Left  ; go back
-<^]::!Right ; go next
+#+::^+
+#-::^-
+#/::^/
+#-::^-
+#o::^o
+; go back
+#[::!Left
+<^[::!Left
+; go next
+#]::!Right
+<^]::!Right
 <^c:: {     ; copy
     if WinActive("ahk_exe KakaoTalk.exe") {
         Send "^c"
@@ -110,10 +119,42 @@ SetStoreCapsLockMode False
 +>^Up:: Send "+{PgUp}"
 +>^Down:: Send "+{PgDn}"
 
+;;;; GetKeyState("RCtrl", "P")
+>^a::Home
+>^b:: {
+    if WinActive("ahk_exe WindowsTerminal.exe") {
+        Send "^b"
+    } else {
+        Send "{Left}"
+    }
+}
+>^<^b::^Left
+>^d::Del
+>^e::End
+>^f::Right
+>^<^f::^Right
+>^g::Enter
+>^h::BS
+>^i::Up
+>^j::Left
+>^k::Down
+>^l::Right
+>^n::PgDn
+>^p::PgUp
+>^r::F9
+>^+r::F5
+>^=:: {
+    if WinActive("ahk_exe WINWORD.EXE") or WinActive("ahk_exe POWERPNT.EXE") {
+        Send "!nei"          ; insert equation
+    } else {
+        Send "="
+    }
+}
+
 
 ;;; shourcut
-+^3:: Send "+#s"
-+<^4:: {
++<^3:: Send "+#s"   ; screenshot
++!^m:: {
     if WinExist("Parsify Desktop") {
         if WinActive("Parsify Desktop") {
             WinMinimize("Parsify Desktop")
@@ -126,10 +167,17 @@ SetStoreCapsLockMode False
         WinSetAlwaysOnTop 1, "A"
     }
 }
-+<^5:: {
++!^t:: {
     if WinExist("ahk_exe WindowsTerminal.exe") {
         WinActivate
     } else {
         Run "explorer.exe shell:appsFolder\Microsoft.WindowsTerminal_8wekyb3d8bbwe!App"
     }
 }
+; +!^n:: {
+;     if WinExist("ahk_exe Notion.exe") {
+;         WinActivate
+;     } else {
+;         Run "C:\Users\User\AppData\Local\Programs\parsify-desktop\Parsify Notion.exe"
+;     }
+; }
