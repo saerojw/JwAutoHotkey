@@ -207,6 +207,11 @@ controlWindow(loc) {
             tgtY := display.list[index].info.ycom - srcH / 2
             tgtW := srcW
             tgtH := srcH
+        } else if (loc == "HalfCenter") {
+            tgtX := display.list[index].LeftHalf.X + display.list[index].LeftHalf.W / 2
+            tgtY := display.list[index].LeftHalf.Y
+            tgtW := display.list[index].LeftHalf.W
+            tgtH := display.list[index].LeftHalf.H
         } else if (loc == "MakeLarger" or loc == "MakeSmaller") {
             steps := 24
             dW := (EdgeL and EdgeR and not fullscreen) ? 0 : display.list[index].info.wmax / steps
@@ -273,10 +278,7 @@ controlWindow(loc) {
 >^!Up:: controlWindow("TopHalf")
 >^!s::
 >^!Down:: controlWindow("BottomHalf")
->^!+s::{
-    controlWindow("LeftHalf")
-    controlWindow("Center")
-}
+>^!+s:: controlWindow("HalfCenter")
 
 >^!+q:: controlWindow("TopLeft")
 >^!+e:: controlWindow("TopRight")
@@ -330,10 +332,7 @@ controlWindow(loc) {
 !Up:: controlWindow("TopHalf")
 !s::
 !Down:: controlWindow("BottomHalf")
-!+s::{
-    controlWindow("LeftHalf")
-    controlWindow("Center")
-}
+!+s:: controlWindow("HalfCenter")
 
 !+q:: controlWindow("TopLeft")
 !+e:: controlWindow("TopRight")
