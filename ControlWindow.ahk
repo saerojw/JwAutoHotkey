@@ -147,7 +147,7 @@ initializeMonitorTarget(Count) {
 }
 
 
-getMonitorIndex(xcow, ycow) {
+getMonitorIndex(x, y) {
     global display
 
     Count := MonitorGetCount()
@@ -163,10 +163,10 @@ getMonitorIndex(xcow, ycow) {
             updateMonitorTarget(A_Index)
         }
 
-        if (display.list[A_Index].info.xmin < xcow
-            and display.list[A_Index].info.ymin < ycow
-            and xcow < display.list[A_Index].info.xmax
-            and ycow < display.list[A_Index].info.ymax) {
+        if (display.list[A_Index].info.xmin <= x
+            and display.list[A_Index].info.ymin <= y
+            and x < display.list[A_Index].info.xmax
+            and y < display.list[A_Index].info.ymax) {
             return A_Index
         }
     }
@@ -193,9 +193,9 @@ controlWindow(loc) {
         }
         WinRestore "A"  ; maximized window cannot move
         WinGetClientPos &srcX, &srcY, &srcW, &srcH, "A"
-        xcow := srcX + srcW / 2
-        ycow := srcY + srcH / 2
-        index := getMonitorIndex(xcow, ycow)
+        cx := srcX + srcW / 2
+        cy := srcY + srcH / 2
+        index := getMonitorIndex(cx, cy)
 
         EdgeL := srcX < display.list[index].info.xmin + 4
         EdgeR := srcX + srcW > display.list[index].info.xmax - 4
@@ -238,19 +238,32 @@ controlWindow(loc) {
         ; correction
         WinGetClientPos &X, &Y, &W, &H, "A"
         if not (X == tgtX and Y == tgtY and W == tgtW and H == tgtH) {
-            tgtXcow := tgtX + tgtW / 2
-            tgtYcow := tgtY + tgtH / 2
-            Xcow := X + W / 2
-            Ycow := Y + H / 2
+            tgtCX := tgtX + tgtW / 2
+            tgtCY := tgtY + tgtH / 2
+            CX := X + W / 2
+            CY := Y + H / 2
             dW := tgtW - W
             dH := tgtH - H
-            dX := (tgtXcow - Xcow - dW) / 2 + (dW < 0 ? dW : 0)
-            dY := (tgtYcow - Ycow - dH / 2) / 2
-            corX := Round(clamp(tgtX + dX, display.list[index].info.xmin + dX, display.list[index].info.xmax - W))
+            dX := (tgtCX - CX - dW) / 2 + (dW < 0 ? dW : 0)
+            dY := (tgtCY - CY - dH / 2) / 2
+            corX := Round(clamp(tgtX + dX, display.list[index].info.xmin, display.list[index].info.xmax - W))
             corY := Round(clamp(tgtY + dY, display.list[index].info.ymin + dY, display.list[index].info.ymax - H))
             corW := tgtW + Abs(dW)
             corH := tgtH + Abs(dH)
+
+            ; idx := getMonitorIndex(corX, corY)
+            ; if (corY + corH > display.list[index].info.ymax - dY) {
+            ;     tmp := (display.list[idx].info.hmax - display.list[index].info.hmax)/2
+            ;     corH := corH - max(tmp, 0)
+            ; } else {
+            ;     tmp := (display.list[idx].info.hmax - display.list[index].info.hmax)/2.625
+            ;     corX := tgtX
+            ; }
+
             WinMove corX, corY, corW, corH, "A"
+
+            ; WinGetClientPos &tmpX, &tmpY, &tmpW, &tmpH, "A"
+            ; MsgBox corY + corH ' ' display.list[index].info.ymax ' ' dY ' '  '`r`n' tgtX ' ' tgtY ' ' tgtW ' ' tgtH '`r`n' X ' ' Y ' ' W ' ' H '`r`n' corX ' ' corY ' ' corW ' ' corH '`r`n' tmpX ' ' tmpY ' ' tmpW ' ' tmpH
         }
     }
     return

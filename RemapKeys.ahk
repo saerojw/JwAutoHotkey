@@ -84,10 +84,10 @@ SetStoreCapsLockMode False
 #o::^o
 ; go back
 #[::!Left
-<^[::!Left
+^[::!Left
 ; go next
 #]::!Right
-<^]::!Right
+^]::!Right
 <^c:: {     ; copy
     if WinActive("ahk_exe KakaoTalk.exe") {
         Send "^c"
