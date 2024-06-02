@@ -67,8 +67,10 @@ SetStoreCapsLockMode False
 !BS:: Send "^{BS}"           ; delete a prev word
 >^!BS:: Send "+^{Right}{BS}" ; delete a next word <- prevent ^!Del
 !Del:: Send "^{Del}"         ; delete a next word
+#BS::
 <^BS:: Send "+{Home}{Del}"   ; delete line till cursor
 >^<^BS::
+#Del::
 <^Del:: Send "+{End}{Del}"   ; delete line from cursor
 
 
@@ -81,13 +83,33 @@ SetStoreCapsLockMode False
 #-::^-
 #/::^/
 #-::^-
+#Enter::^Enter
 #o::^o
-; go back
-#[::!Left
-^[::!Left
-; go next
-#]::!Right
-^]::!Right
+#[::
+^[:: {
+    if WinActive("ahk_exe Code.exe") {
+        Send "^["
+    } else {
+        Send "!{Left}"  ; go back
+    }
+}
+#]::
+^]::{
+    if WinActive("ahk_exe Code.exe") {
+        Send "^]"
+    } else {
+        Send "!{Right}"  ; go next
+    }
+}
+#p::{
+    if WinActive("ahk_exe Code.exe") {
+        Send "^p"
+    } else {
+        Send "{RWinDown}p{RWinUp}"
+    }
+}
+#\::^\
+#'::^'
 <^c:: {     ; copy
     if WinActive("ahk_exe KakaoTalk.exe") {
         Send "^c"

@@ -17,7 +17,6 @@
 !<^Up:: Send "!{Up}"
 !<^Down:: Send "!{Down}"
 
-
 ;;; explorer
 #HotIf WinActive("ahk_exe Explorer.EXE") or WinActive("ahk_exe explorer.exe")
 Enter:: {
@@ -29,9 +28,12 @@ Enter:: {
         Send "{Enter}"  ; done
     }
 }
+#o::
 <^o:: Send "{Enter}"    ; open
+#i::
 <^i:: Send "!{Enter}"   ; information
 <^d:: Send "^c^v"       ; duplicate
+#BS::
 <^BS:: Send "{Del}"     ; delete
 Space:: {
     ClassNN := ControlGetClassNN(ControlGetFocus("A"))
@@ -70,29 +72,41 @@ Space:: !Space
 ;;; microsoft office
 #HotIf WinActive("ahk_exe EXCEL.EXE")
 +<^s:: Send "{F12}"         ; save as
+#0::
 <^0:: Send "!wj"            ; view -> page width
+#-::
 <^-:: Send "^{WheelDown}"   ; zoom out
+#=::
 <^=:: Send "^{WheelUp}"     ; zoom in
 !Enter:: Send "!{Enter}"    ; new line in cell
 
 #HotIf WinActive("ahk_exe POWERPNT.EXE")
 >^=:: Send "!nei"          ; insert equation
 +<^s:: Send "{F12}"         ; save as
+#0::
 <^0:: Send "!wf"            ; view >> fit to window
+#-::
 <^-:: Send "^{WheelDown}"   ; zoom out
+#=::
 <^=:: Send "^{WheelUp}"     ; zoom in
 
 #HotIf WinActive("ahk_exe WINWORD.EXE")
 >^=:: Send "!nei"          ; insert equation
 +<^s:: Send "{F12}"         ; save as
+#0::
 <^0:: Send "!wi"            ; view -> 100%
+#-::
 <^-:: Send "^{WheelDown}"   ; zoom out
+#=::
 <^=:: Send "^{WheelUp}"     ; zoom in
 
 
 ;;; 한컴오피스 한글
 #HotIf WinActive("ahk_exe Hwp.exe")
+#0::
 <^0:: Send "^gw"            ; 폭 맞춤
+#-::
 <^-:: Send "^{WheelDown}"   ; zoom out
+#=::
 <^=:: Send "^{WheelUp}"     ; zoom in
 #HotIf
