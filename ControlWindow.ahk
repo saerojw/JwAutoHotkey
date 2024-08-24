@@ -10,6 +10,8 @@
 ; !(Alt), ^(Ctrl), +(Shift), #(vk5B;LWin or vk5C;RWin), <*(Left*), >*(Right*)
 ; vk15(HanEng), vk19(Hanja), AppsKey(ContextMenu), BS(Backspace)
 ;------------------------------------------------------------------------------;
+DEBUGGING := 0
+
 display := { Count: 0, list: [] }
 
 min(A, B) {
@@ -58,8 +60,8 @@ updateMonitorTarget(index) {
     vertical := W_len < H_len
     display.list[index].id := X_min . Y_min . X_max . Y_max
     display.list[index].info := {
-        xmin: X_min, xcom: X_1_2, xmax: X_max, wmax: W_len,
-        ymin: Y_min, ycom: Y_1_2, ymax: Y_max, hmax: H_len
+        xmin: X_min, xcom: X_1_2, xmax: X_max, wmax: W_len, xmargin: max(X_min/2, 4),
+        ymin: Y_min, ycom: Y_1_2, ymax: Y_max, hmax: H_len, ymargin: max(Y_min/2, 4)
     }
 
     AlmostFullRatio := 0.9
@@ -68,6 +70,14 @@ updateMonitorTarget(index) {
         Y: Y_min + (1 - AlmostFullRatio) / 2 * H_len,
         W: AlmostFullRatio * W_len,
         H: AlmostFullRatio * H_len
+    }
+
+    Steps := 25
+    display.list[index].ResizeStep := {
+        X: W_len / (Steps * 2),
+        Y: H_len / (Steps * 2),
+        W: W_len / Steps,
+        H: H_len / Steps
     }
 
     display.list[index].LeftHalf := { X: X_min, Y: Y_min, W: W_1_2, H: H_len }
@@ -191,17 +201,17 @@ controlWindow(loc) {
         if (Title == "" or Title == "Program Manager") {
             return
         }
-        WinRestore "A"  ; maximized window cannot move
         WinGetClientPos &srcX, &srcY, &srcW, &srcH, "A"
+        WinRestore "A"  ; maximized window cannot move
         cx := srcX + srcW / 2
         cy := srcY + srcH / 2
         index := getMonitorIndex(cx, cy)
 
-        EdgeL := srcX < display.list[index].info.xmin + 4
-        EdgeR := srcX + srcW > display.list[index].info.xmax - 4
-        EdgeT := srcY < display.list[index].info.ymin + 4
-        EdgeB := srcY + srcH > display.list[index].info.ymax - 4
-        fullscreen := EdgeL and EdgeR and EdgeT and EdgeB
+        attachedL := srcX < display.list[index].info.xmin + display.list[index].info.xmargin
+        attachedR := srcX + srcW > display.list[index].info.xmax - display.list[index].info.xmargin
+        attachedT := srcY < display.list[index].info.ymin + display.list[index].info.ymargin * 3
+        attachedB := srcY + srcH > display.list[index].info.ymax - display.list[index].info.ymargin
+        fullscreen := attachedL and attachedR and attachedT and attachedB
         if (loc == "Center") {
             tgtX := display.list[index].info.xcom - srcW / 2
             tgtY := display.list[index].info.ycom - srcH / 2
@@ -212,17 +222,48 @@ controlWindow(loc) {
             tgtY := display.list[index].LeftHalf.Y
             tgtW := display.list[index].LeftHalf.W
             tgtH := display.list[index].LeftHalf.H
-        } else if (loc == "MakeLarger" or loc == "MakeSmaller") {
-            steps := 24
-            dW := (EdgeL and EdgeR and not fullscreen) ? 0 : display.list[index].info.wmax / steps
-            dH := (EdgeT and EdgeB and not fullscreen) ? 0 : display.list[index].info.hmax / steps
-            dX := (EdgeR and not fullscreen) ? -dW : -dW / 2
-            dY := (EdgeB and not fullscreen) ? -dH : -dH / 2
-            sign := loc == "MakeLarger" ? 1 : -1
-            tgtW := srcW + sign * dW
-            tgtH := srcH + sign * dH
-            tgtX := srcX + (1 - ((EdgeL + fullscreen) = 1)) * sign * dX
-            tgtY := srcY + (1 - ((EdgeT + fullscreen) = 1)) * sign * dY
+        } else if (loc == "MakeLarger" or loc == "MakeSmaller"
+                or loc == "MakeLargerH" or loc == "MakeSmallerH" or loc == "MakeLargerW" or loc == "MakeSmallerW") {
+            useMaxW := (attachedL and attachedR and not fullscreen)
+            useMaxH := (attachedT and attachedB and not fullscreen)
+            both := (loc == "MakeLarger" or loc == "MakeSmaller")
+            resizeW := ((both or loc == "MakeLargerW" or loc == "MakeSmallerW") and not useMaxW)
+            resizeH := ((both or loc == "MakeLargerH" or loc == "MakeSmallerH") and not useMaxH)
+
+            sign := (loc == "MakeLarger" or loc == "MakeLargerH" or loc == "MakeLargerW") ? 1 : -1
+            step := sign ;+ (sign > 0)
+            if (resizeW) {
+                posW := srcW / display.list[index].ResizeStep.W
+                tgtW := (posW + step) * display.list[index].ResizeStep.W
+            } else {
+                tgtW := useMaxW ? display.list[index].info.wmax : srcW
+            }
+            if (resizeH) {
+                posH := srcH / display.list[index].ResizeStep.H
+                tgtH := (posH + step) * display.list[index].ResizeStep.H
+            } else {
+                tgtH := useMaxH ? display.list[index].info.hmax : srcH
+            }
+            if (resizeW) {
+                if ((attachedL or attachedR) and not fullscreen) {
+                    tgtX := attachedL ? display.list[index].info.xmin : display.list[index].info.xmax - tgtW
+                } else {
+                    posX := srcX / display.list[index].ResizeStep.X
+                    tgtX := (posX - step) * display.list[index].ResizeStep.X
+                }
+            } else {
+                tgtX := useMaxW ? display.list[index].info.xmin : srcX
+            }
+            if (resizeH) {
+                if ((attachedT or attachedB) and not fullscreen) {
+                    tgtY := attachedT ? display.list[index].info.ymin : display.list[index].info.ymax - tgtH
+                } else {
+                    posY := srcY / display.list[index].ResizeStep.Y
+                    tgtY := (posY - step) * display.list[index].ResizeStep.Y
+                }
+            } else {
+                tgtY := useMaxH ? display.list[index].info.ymin : srcY
+            }
         } else {
             tgtX := display.list[index].%loc%.X
             tgtY := display.list[index].%loc%.Y
@@ -237,33 +278,55 @@ controlWindow(loc) {
 
         ; correction
         WinGetClientPos &X, &Y, &W, &H, "A"
-        if not (X == tgtX and Y == tgtY and W == tgtW and H == tgtH) {
-            tgtCX := tgtX + tgtW / 2
-            tgtCY := tgtY + tgtH / 2
-            CX := X + W / 2
-            CY := Y + H / 2
-            dW := tgtW - W
-            dH := tgtH - H
-            dX := (tgtCX - CX - dW) / 2 + (dW < 0 ? dW : 0)
-            dY := (tgtCY - CY - dH / 2) / 2
-            corX := Round(clamp(tgtX + dX, display.list[index].info.xmin, display.list[index].info.xmax - W))
-            corY := Round(clamp(tgtY + dY, display.list[index].info.ymin + dY, display.list[index].info.ymax - H))
-            corW := tgtW + Abs(dW)
-            corH := tgtH + Abs(dH)
-
-            ; idx := getMonitorIndex(corX, corY)
-            ; if (corY + corH > display.list[index].info.ymax - dY) {
-            ;     tmp := (display.list[idx].info.hmax - display.list[index].info.hmax)/2
-            ;     corH := corH - max(tmp, 0)
-            ; } else {
-            ;     tmp := (display.list[idx].info.hmax - display.list[index].info.hmax)/2.625
-            ;     corX := tgtX
-            ; }
-
+        err_lv := 2
+        if (Abs(X - tgtX) > err_lv or Abs(Y - tgtY) > err_lv or Abs(W - tgtW) > err_lv or Abs(H - tgtH) > err_lv) {
+            corX := tgtX + (tgtX - X)
+            corY := tgtY
+            corW := tgtW + (tgtW - W)
+            corH := tgtH + ((tgtY + tgtH) - (Y + H))
             WinMove corX, corY, corW, corH, "A"
+        }
 
-            ; WinGetClientPos &tmpX, &tmpY, &tmpW, &tmpH, "A"
-            ; MsgBox corY + corH ' ' display.list[index].info.ymax ' ' dY ' '  '`r`n' tgtX ' ' tgtY ' ' tgtW ' ' tgtH '`r`n' X ' ' Y ' ' W ' ' H '`r`n' corX ' ' corY ' ' corW ' ' corH '`r`n' tmpX ' ' tmpY ' ' tmpW ' ' tmpH
+        if (DEBUGGING) {
+            WinGetClientPos &outX, &outY, &outW, &outH, "A"
+            corX := tgtX + (tgtX - X)
+            corY := tgtY
+            corW := tgtW + (tgtW - W)
+            corH := tgtH + ((tgtY + tgtH) - (Y + H))
+
+            sposX := srcX / display.list[index].ResizeStep.X
+            sposY := srcY / display.list[index].ResizeStep.Y
+            sposW := srcW / display.list[index].ResizeStep.W
+            sposH := srcH / display.list[index].ResizeStep.H
+            tposX := tgtX / display.list[index].ResizeStep.X
+            tposY := tgtY / display.list[index].ResizeStep.Y
+            tposW := tgtW / display.list[index].ResizeStep.W
+            tposH := tgtH / display.list[index].ResizeStep.H
+            oposX := X / display.list[index].ResizeStep.X
+            oposY := Y / display.list[index].ResizeStep.Y
+            oposW := W / display.list[index].ResizeStep.W
+            oposH := H / display.list[index].ResizeStep.H
+            cposX := corX / display.list[index].ResizeStep.X
+            cposY := corY / display.list[index].ResizeStep.Y
+            cposW := corW / display.list[index].ResizeStep.W
+            cposH := corH / display.list[index].ResizeStep.H
+            fposX := outX / display.list[index].ResizeStep.X
+            fposY := outY / display.list[index].ResizeStep.Y
+            fposW := outW / display.list[index].ResizeStep.W
+            fposH := outH / display.list[index].ResizeStep.H
+
+            MsgBox ('src: ' srcX ' ' srcY ' ' srcX + srcW ' ' srcY + srcH ' | ' srcW ' ' srcH
+                '`r`ntgt: ' tgtX ' ' tgtY ' ' tgtX + tgtW ' ' tgtY + tgtH ' | ' tgtW ' ' tgtH
+                '`r`nout: ' X ' ' Y ' ' X + W ' ' Y + H ' | ' W ' ' H
+                '`r`ncor: ' corX ' ' corY ' ' corX + corW ' ' corY + corH ' | ' corW ' ' corH
+                '`r`nout: ' outX ' ' outY ' ' outX + outW ' ' outY + outH ' | ' outW ' ' outH
+            '`r`n`r`nattached L: ' attachedL ' R: ' attachedR ' T: ' attachedT ' B: ' attachedB
+            '`r`n`r`nsrc: ' Floor(sposX*10) ' ' Floor(sposY*10) ' ' Floor(sposW*10) ' ' Floor(sposH*10)
+                '`r`ntgt: ' Floor(tposX*10) ' ' Floor(tposY*10) ' ' Floor(tposW*10) ' ' Floor(tposH*10)
+                '`r`nout: ' Floor(oposX*10) ' ' Floor(oposY*10) ' ' Floor(oposW*10) ' ' Floor(oposH*10)
+                '`r`ncor: ' Floor(cposX*10) ' ' Floor(cposY*10) ' ' Floor(cposW*10) ' ' Floor(cposH*10)
+                '`r`nout: ' Floor(fposX*10) ' ' Floor(fposY*10) ' ' Floor(fposW*10) ' ' Floor(fposH*10)
+            )
         }
     }
     return
@@ -282,6 +345,8 @@ controlWindow(loc) {
 >^!Enter:: controlWindow("AlmostFullscreen")
 >^!=:: controlWindow("MakeLarger")
 >^!-:: controlWindow("MakeSmaller")
+>^!+=:: controlWindow("MakeLargerH")
+>^!+-:: controlWindow("MakeSmallerH")
 
 >^!a::
 >^!Left:: controlWindow("LeftHalf")
@@ -310,17 +375,17 @@ controlWindow(loc) {
 >^!f:: controlWindow("Fullscreen")
 >^!e:: controlWindow("RightThreeQuarter")
 
->^!1:: controlWindow("FirstQuarter")
->^!2:: controlWindow("SecondQuarter")
->^!3:: controlWindow("ThirdQuarter")
->^!4:: controlWindow("LastQuarter")
+>^!1:: controlWindow("FirstSixth")
+>^!2:: controlWindow("SecondSixth")
+>^!3:: controlWindow("ThirdSixth")
+>^!4:: controlWindow("FourthSixth")
+>^!5:: controlWindow("FifthSixth")
+>^!6:: controlWindow("LastSixth")
 
->^!5:: controlWindow("FirstSixth")
->^!6:: controlWindow("SecondSixth")
->^!7:: controlWindow("ThirdSixth")
->^!8:: controlWindow("FourthSixth")
->^!9:: controlWindow("FifthSixth")
->^!0:: controlWindow("LastSixth")
+>^!+1:: controlWindow("FirstQuarter")
+>^!+2:: controlWindow("SecondQuarter")
+>^!+3:: controlWindow("ThirdQuarter")
+>^!+4:: controlWindow("LastQuarter")
 
 #HotIf GetKeyState("CapsLock", "P")
 ; shortcuts
@@ -336,6 +401,8 @@ controlWindow(loc) {
 !Enter:: controlWindow("AlmostFullscreen")
 !=:: controlWindow("MakeLarger")
 !-:: controlWindow("MakeSmaller")
+!+=:: controlWindow("MakeLargerH")
+!+-:: controlWindow("MakeSmallerH")
 
 !a::
 !Left:: controlWindow("LeftHalf")
@@ -364,15 +431,15 @@ controlWindow(loc) {
 !f:: controlWindow("Fullscreen")
 !e:: controlWindow("RightThreeQuarter")
 
-!1:: controlWindow("FirstQuarter")
-!2:: controlWindow("SecondQuarter")
-!3:: controlWindow("ThirdQuarter")
-!4:: controlWindow("LastQuarter")
+!1:: controlWindow("FirstSixth")
+!2:: controlWindow("SecondSixth")
+!3:: controlWindow("ThirdSixth")
+!4:: controlWindow("FourthSixth")
+!5:: controlWindow("FifthSixth")
+!6:: controlWindow("LastSixth")
 
-!5:: controlWindow("FirstSixth")
-!6:: controlWindow("SecondSixth")
-!7:: controlWindow("ThirdSixth")
-!8:: controlWindow("FourthSixth")
-!9:: controlWindow("FifthSixth")
-!0:: controlWindow("LastSixth")
+!+1:: controlWindow("FirstQuarter")
+!+2:: controlWindow("SecondQuarter")
+!+3:: controlWindow("ThirdQuarter")
+!+4:: controlWindow("LastQuarter")
 #HotIf

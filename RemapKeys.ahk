@@ -57,7 +57,7 @@ SetStoreCapsLockMode False
 #Space::VK19    ; Hanja
 <^Space::#s     ; search
 ; !Space::#s      ; search -> powertoys run
-; !+<^a:: #^t     ; ::WinSetAlwaysOnTop -1, "A" ; AlwaysOnTop -> powertoys AlwaysOnTop
+!>^t:: #^t     ; ::WinSetAlwaysOnTop -1, "A" ; AlwaysOnTop -> powertoys AlwaysOnTop
 ; >^<^Space::#.   ; Emoji
 ; >^<^q:: DllCall("LockWorkStation")    ; Lock Screen
 
@@ -143,24 +143,27 @@ SetStoreCapsLockMode False
 
 ;;; shourcut
 +<^3:: Send "+#s"   ; screenshot
-+!<^t:: {
++!<^>^t:: {
     if WinExist("ahk_exe WindowsTerminal.exe") {
         WinActivate
     } else {
         Run "explorer.exe shell:appsFolder\Microsoft.WindowsTerminal_8wekyb3d8bbwe!App"
     }
 }
-+!^n:: {
++!<^>^n:: {
     if WinExist("ahk_exe notepad.exe") {
         WinActivate
     } else {
         Run "notepad.exe"
     }
 }
-+!^c:: {
++!<^>^c:: {
     if WinExist("ahk_exe ApplicationFrameHost.exe") {
         WinActivate
     } else {
         Run "Calc"
     }
 }
++!<^>^w::+!^#w  ; ms office Word
++!<^>^p::+!^#p  ; ms office PowerPoint
++!<^>^x::+!^#x  ; ms office Excel
