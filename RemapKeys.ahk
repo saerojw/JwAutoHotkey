@@ -1,5 +1,5 @@
 ;------------------------------------------------------------------------------;
-; Modified on 2023/05/31 by Juwon
+; Modified on 2024/08/25 by Juwon
 ; e-mail: saero94j@gmail.com
 ;
 ; Script for using macOS layout keyboard on Windows.

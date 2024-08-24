@@ -1,5 +1,5 @@
 ;------------------------------------------------------------------------------;
-; Modified on 2022/02/16 by Juwon
+; Modified on 2024/08/25 by Juwon
 ; e-mail: saero94j@gmail.com
 ;
 ; Script for multi-tasking similar to magnet on macOS
