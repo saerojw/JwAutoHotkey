@@ -9,7 +9,8 @@ IMECheckHangul() { ; 0: 영어, 1: 한글
     DetectHiddenWindows(True)
     IME_Hangul := SendMessage(0x0283, 0x0005, 0x0000, , "ahk_id " hIME)
     DetectHiddenWindows(temp)
-    return IME_Hangul
+    cannot_check_exe := (WinActive("ahk_exe DeepL.exe") and 1)
+    return IME_Hangul or cannot_check_exe
 }
 
 +Space::CapsLock
@@ -88,19 +89,18 @@ BS::Del
 \::^\
 Enter::^Enter
 a::Home
-b:: {
-    if WinActive("ahk_exe WindowsTerminal.exe") {
-        Send "^b"
-    } else {
-        Send "{Left}"
-    }
-}
-<^b::^Left
+b:: ^Left
+; {
+;     if WinActive("ahk_exe WindowsTerminal.exe") {
+;         Send "^b"
+;     } else {
+;         Send "^{Left}"
+;     }
+; }
 c::^c
 d::Del
 e::End
-f::Right
-<^f::^Right
+f::^Right
 g::Enter
 h::BS
 i::Up

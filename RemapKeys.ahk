@@ -55,9 +55,9 @@ SetStoreCapsLockMode False
 +Space::CapsLock
 >^Space::VK15   ; Hangul
 #Space::VK19    ; Hanja
-; ^!t::WinSetAlwaysOnTop -1, "A" ; toggle AlwaysOnTop -> powertoys
-!Space::#s      ; search
-<^Space::#Space ; search -> powertoys run
+<^Space::#s     ; search
+; !Space::#s      ; search -> powertoys run
+; !+<^a:: #^t     ; ::WinSetAlwaysOnTop -1, "A" ; AlwaysOnTop -> powertoys AlwaysOnTop
 ; >^<^Space::#.   ; Emoji
 ; >^<^q:: DllCall("LockWorkStation")    ; Lock Screen
 
@@ -74,49 +74,29 @@ SetStoreCapsLockMode False
 <^Del:: Send "+{End}{Del}"   ; delete line from cursor
 
 
-;;; Windows key
+;;; AltTab
 <^Tab::AltTab       ; alt tap
 <^`::ShiftAltTab    ; shift alt tap
 >^`::+^Tab
 
+
+;;; Windows key
 #+::^+
 #-::^-
 #/::^/
 #-::^-
 #Enter::^Enter
 #o::^o
-#[::
-^[:: {
-    if WinActive("ahk_exe Code.exe") {
-        Send "^["
-    } else {
-        Send "!{Left}"  ; go back
-    }
-}
-#]::
-^]::{
-    if WinActive("ahk_exe Code.exe") {
-        Send "^]"
-    } else {
-        Send "!{Right}"  ; go next
-    }
-}
-#p::{
-    if WinActive("ahk_exe Code.exe") {
-        Send "^p"
-    } else {
-        Send "{RWinDown}p{RWinUp}"
-    }
-}
 #\::^\
 #'::^'
-<^c:: {     ; copy
-    if WinActive("ahk_exe KakaoTalk.exe") {
-        Send "^c"
-    } else {
-        Send "^{Ins}"
-    }
-}
+#HotIf not WinActive("ahk_exe Code.exe")
+#[::
+^[:: Send "!{Left}"  ; go back
+#]::
+^]:: Send "!{Right}"  ; go next
+#HotIf not WinActive("ahk_exe KakaoTalk.exe")
+<^c:: ^Ins  ; copy
+#HotIf
 <^v:: Send "+{Ins}"     ; paste
 +<^v:: Send "#v"        ; clipboard
 <^m:: WinMinimize "A"   ; minimize window
@@ -141,20 +121,14 @@ SetStoreCapsLockMode False
 +>^Up:: Send "+{PgUp}"
 +>^Down:: Send "+{PgDn}"
 
+
 ;;;; GetKeyState("RCtrl", "P")
 >^a::Home
->^b:: {
-    if WinActive("ahk_exe WindowsTerminal.exe") {
-        Send "^b"
-    } else {
-        Send "{Left}"
-    }
-}
->^<^b::^Left
+>^b::^Left
+>^+b::+^Left
 >^d::Del
 >^e::End
->^f::Right
->^<^f::^Right
+>^f::^Right
 >^g::Enter
 >^h::BS
 >^i::Up
@@ -165,41 +139,28 @@ SetStoreCapsLockMode False
 >^p::PgUp
 >^r::F9
 >^+r::F5
->^=:: {
-    if WinActive("ahk_exe WINWORD.EXE") or WinActive("ahk_exe POWERPNT.EXE") {
-        Send "!nei"          ; insert equation
-    } else {
-        Send "="
-    }
-}
 
 
 ;;; shourcut
 +<^3:: Send "+#s"   ; screenshot
-+!^m:: {
-    if WinExist("Parsify Desktop") {
-        if WinActive("Parsify Desktop") {
-            WinMinimize("Parsify Desktop")
-        } else {
-            WinActivate
-            WinSetAlwaysOnTop 1, "A"
-        }
-    } else {
-        Run "C:\Users\User\AppData\Local\Programs\parsify-desktop\Parsify Desktop.exe"
-        WinSetAlwaysOnTop 1, "A"
-    }
-}
-+!^t:: {
++!<^t:: {
     if WinExist("ahk_exe WindowsTerminal.exe") {
         WinActivate
     } else {
         Run "explorer.exe shell:appsFolder\Microsoft.WindowsTerminal_8wekyb3d8bbwe!App"
     }
 }
-; +!^n:: {
-;     if WinExist("ahk_exe Notion.exe") {
-;         WinActivate
-;     } else {
-;         Run "C:\Users\User\AppData\Local\Programs\parsify-desktop\Parsify Notion.exe"
-;     }
-; }
++!^n:: {
+    if WinExist("ahk_exe notepad.exe") {
+        WinActivate
+    } else {
+        Run "notepad.exe"
+    }
+}
++!^c:: {
+    if WinExist("ahk_exe ApplicationFrameHost.exe") {
+        WinActivate
+    } else {
+        Run "Calc"
+    }
+}

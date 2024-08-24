@@ -1,5 +1,18 @@
+#HotIf WinActive("ahk_exe PowerToys.Peek.UI.exe")
+Space:: !Space
+
+
+;;; vscode
+#HotIf WinActive("ahk_exe Code.exe")
+#]::^]
+#[::^[
+#p::^p
+
+
 ;;; windows terminal
 #HotIf WinActive("ahk_exe WindowsTerminal.exe")
+>^b:: Send "^b"
+
 <^a:: Send "+^a"    ; select all
 <^f:: Send "+^f"    ; find
 <^d:: Send "+!="    ; split vertically
@@ -39,14 +52,12 @@ Space:: {
     ClassNN := ControlGetClassNN(ControlGetFocus("A"))
     ; select file or folder in explorer or desktop
     if (InStr(ClassNN, "DirectUIHWND")>0 or ClassNN = "SysListView321") {
-        Send "+{Space}"
+        Send "^{Space}"
     } else {
         Send "{Space}"
     }
 }
 
-#HotIf WinActive("ahk_exe PowerToys.Peek.UI.exe")
-Space:: !Space
 
 ;;; open current web page on the another browser (chrome <-> edge)
 #HotIf WinActive("ahk_exe chrome.exe")
@@ -81,7 +92,7 @@ Space:: !Space
 !Enter:: Send "!{Enter}"    ; new line in cell
 
 #HotIf WinActive("ahk_exe POWERPNT.EXE")
->^=:: Send "!nei"          ; insert equation
+>^=:: Send "!nei"           ; insert equation
 +<^s:: Send "{F12}"         ; save as
 #0::
 <^0:: Send "!wf"            ; view >> fit to window
@@ -91,7 +102,7 @@ Space:: !Space
 <^=:: Send "^{WheelUp}"     ; zoom in
 
 #HotIf WinActive("ahk_exe WINWORD.EXE")
->^=:: Send "!nei"          ; insert equation
+>^=:: Send "!nei"           ; insert equation
 +<^s:: Send "{F12}"         ; save as
 #0::
 <^0:: Send "!wi"            ; view -> 100%
@@ -99,7 +110,6 @@ Space:: !Space
 <^-:: Send "^{WheelDown}"   ; zoom out
 #=::
 <^=:: Send "^{WheelUp}"     ; zoom in
-
 
 ;;; 한컴오피스 한글
 #HotIf WinActive("ahk_exe Hwp.exe")
@@ -109,4 +119,6 @@ Space:: !Space
 <^-:: Send "^{WheelDown}"   ; zoom out
 #=::
 <^=:: Send "^{WheelUp}"     ; zoom in
+
+
 #HotIf
